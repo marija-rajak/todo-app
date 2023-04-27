@@ -1,0 +1,30 @@
+main {
+	width: 520px;
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 30px;
+	margin: 0 auto;
+}
+
+#newTask {
+	background-color: var(--very-light-grayish-blue);
+	width: 100%;
+	padding: 20px;
+	border-radius: 6px;
+}
+
+.frame {
+	display: inline-block;
+	border-radius: 50%;
+	background-image: var(--check-background);
+	width: 20px;
+	height: 20px;
+	box-sizing: content-box;
+	padding: 2px;
+	z-index: -1;
+	visibility:hidden;
+
+	&:hover {
+		visibility: visible;
+	}
+}

@@ -1,0 +1,10 @@
+body {
+	background-image: url('..//..//images/bg-desktop-light.jpg');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: contain;
+
+	&.dark {
+		background-image: url('..//..//images/bg-desktop-dark.jpg');
+	}
+}
