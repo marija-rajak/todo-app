@@ -7,7 +7,8 @@
 
 		<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
 		<link rel="stylesheet" type="text/css" href="css/myStyle.css">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 		<title>Frontend Mentor | Todo app</title>
 
@@ -24,26 +25,58 @@
 
 		<main>
 			<div id="newTask">
-				<div class="frame">
+				<div class="checkMark">
+					<span class="frame"></span>
 					<input type="checkbox" name="completed">
+					<span class="material-icons-round check-mark">done</span>
 				</div>
-				<input type="text" placeholder="Create a new todo...">
-				<!-- <span class="material-icons-outlined">close</span> -->
+				<input type="text" size="40" placeholder="Create a new todo...">
+				<span class="action">Add</span>
 			</div>
-			<div id="list">
-				<ul>
-					<li>
-						<span>items left</span>
-						<div>
-							<span>All</span>
-							<span>Active</span>
-							<span>Completed</span>
-						</div>
-						<span>Clear Completed</span>
-					</li>
-				</ul>
-				<p>Drag and drop to reorder list</p>
-			</div>
+
+			<ul id="todo_list">
+				<li draggable="true">
+					<div class="checkMark">
+						<span class="frame"></span>
+						<input type="checkbox" name="completed">
+						<span class="material-icons-round check-mark">done</span>
+					</div>
+					<p>Some task</p>
+					<span class="material-symbols-rounded action">close</span>
+
+				</li>
+				<li draggable="true">
+					<div class="checkMark">
+						<span class="frame"></span>
+						<input type="checkbox" name="completed">
+						<span class="material-icons-round check-mark">done</span>
+					</div>
+					<p>Some task 2</p>
+					<span class="material-symbols-rounded action">close</span>
+
+				</li>
+				<li draggable="true">
+					<div class="checkMark">
+						<span class="frame"></span>
+						<input type="checkbox" name="completed">
+						<span class="material-icons-round check-mark">done</span>
+					</div>
+					<p>Another task</p>
+					<span class="material-symbols-rounded action">close</span>
+
+				</li>
+				<li>
+					<span>items left</span>
+					<div>
+						<span>All</span>
+						<span>Active</span>
+						<span>Completed</span>
+					</div>
+					<span>Clear Completed</span>
+				</li>
+			</ul>
+			<p class="info">Drag and drop to reorder list</p>
+
 		</main>
 
 		<footer>

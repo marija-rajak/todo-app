@@ -1,8 +1,11 @@
 @import 'base/reset';
-@import 'base/typography';
 @import 'helpers/variables';
+@import 'base/typography';
+
+@import 'helpers/mixins';
+@import 'components/input';
+@import 'components/list';
 @import 'layout/background';
 @import 'layout/header';
 @import 'layout/main';
 @import 'layout/footer';
-@import 'components/input';

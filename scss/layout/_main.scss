@@ -7,24 +7,35 @@ main {
 }
 
 #newTask {
-	background-color: var(--very-light-grayish-blue);
-	width: 100%;
-	padding: 20px;
+	@include listItem;
 	border-radius: 6px;
+
+	&>:nth-child(2) {
+		flex-grow: 1;
+	}
 }
 
-.frame {
-	display: inline-block;
-	border-radius: 50%;
-	background-image: var(--check-background);
+.checkMark {
+	@include checkBox;
 	width: 20px;
 	height: 20px;
-	box-sizing: content-box;
-	padding: 2px;
-	z-index: -1;
-	visibility:hidden;
+}
 
-	&:hover {
-		visibility: visible;
-	}
+.action, .action.material-symbols-rounded {
+	display: none;
+	font-weight: 300;
+}
+
+p.info {
+	margin-top: 30px;
+	text-align: center;
+
+}
+
+.insertAbove {
+	margin-top: 30px;
+}
+
+.insertBelow {
+margin-bottom: 30px;
 }

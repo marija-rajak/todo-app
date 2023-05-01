@@ -3,6 +3,7 @@ body {
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: contain;
+	background-color: var(--light-grayish-blue);
 
 	&.dark {
 		background-image: url('..//..//images/bg-desktop-dark.jpg');

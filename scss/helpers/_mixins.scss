@@ -1,0 +1,34 @@
+@mixin listItem {
+	background-color: var(--very-light-grayish-blue);
+	width: 100%;
+	padding: 20px;
+	position: relative;
+	color: var(--very-dark-grayish-blue);
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+	align-items: flex-end;
+	gap: 10px;
+}
+
+@mixin checkBox {
+	.frame {
+		position: absolute;
+		display: block;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background-image: var(--check-background);
+	}
+
+	.check-mark.material-icons-round {
+		display: inline;
+		font-size: 0.7rem;
+		font-weight: 900;
+		color: var(--very-light-gray);
+		position: relative;
+		top: 4px;
+		left: 4px;
+		z-index: 1;
+	}
+}
