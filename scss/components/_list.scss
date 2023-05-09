@@ -1,6 +1,7 @@
 ul {
 	list-style-type: none;
 	box-shadow: 0 10px 30px -20px var(--dark-grayish-blue);
+	//background-color: var(--very-dark-grayish-blue);
 
 	li {
 		@include listItem;
@@ -21,31 +22,42 @@ ul {
 			border-bottom-right-radius: 6px;
 			justify-content: space-between;
 
-			& span {
-				color: var(--dark-grayish-blue);
-				font-size: 0.8rem;
+		}
 
-				&:hover {
-					color: var(--very-dark-grayish-blue);
-					cursor: pointer;
-				}
+		& span {
+			color: var(--dark-grayish-blue);
+			font-size: 0.8rem;
+
+			&:hover {
+				color: var(--very-dark-grayish-blue);
+				cursor: pointer;
+			}
+		}
+
+		&:last-child div {
+			flex-grow: 0;
+			display: flex;
+			justify-content: center;
+			gap: 20px;
+
+			& span:first-child {
+				color: var(--bright-blue);
 			}
 
-			& div {
-				flex-grow: 0;
-				display: flex;
-				gap: 20px;
-
-				& span:first-child {
-					color: var(--bright-blue);
-				}
-
-				& span:hover {
-					font-weight: 700;
-				}
+			& span:hover {
+				font-weight: 700;
 			}
 		}
 
 
+		&:hover>span.material-symbols-rounded.action {
+			display: block;
+
+		}
+
+		& p.done {
+			text-decoration: line-through;
+			color: var(--dark-grayish-blue);
+		}
 	}
 }

@@ -21,14 +21,16 @@ input[type="checkbox"] {
 	vertical-align: text-bottom;
 	position: absolute;
 	z-index: 2;
+	cursor: pointer;
+
+	&:checked {
+		background-color: transparent;
+		border: none;
+	}
 
 	&:hover {
 		border-color: transparent;
 		background-clip: padding-box;
 	}
 
-	&:checked {
-		background-color: transparent;
-		border: none;
-	}
 }

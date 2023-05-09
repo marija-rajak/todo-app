@@ -1,31 +1,67 @@
-const moon = document.getElementById('themeIcon');
-const todos = document.querySelectorAll('#todo_list li');
-const list = document.getElementById('todo_list');
-var itemToMove = null;
+const moon = document.getElementById('themeIcon'); //theme changing icon
+let todos; //collection of todo list elements
+const list = document.getElementById('todo_list'); //todo list
 
-moon.addEventListener('click', function () { document.body.classList.toggle('dark'); })
+let itemToMove = null; //dragged list item
 
-//drag and drop funcionality
-todos.forEach((todo, index) => {
+const taskInput = document.getElementById('task-input');
+const completeCheck = document.getElementById('complete-check');
+const addTaskBtn = document.getElementById('add-task');
+
+const leftTasksNumber = list.lastElementChild.firstElementChild;
+const completedFilterBtn = document.getElementById('completedFilterBtn');
+const activeFilterBtn = document.getElementById('activeFilterBtn');
+const allBtn = document.getElementById('allBtn');
+const clearCompletedBtn = document.getElementById('clearCompletedBtn');
+
+//Get items from local storage on application start
+window.onload = () => {
+	let savedData = JSON.parse(localStorage.getItem('tasks'));
+	if (savedData) {
+		savedData.forEach(savedItem => {
+			const taskToWrite = createTask(savedItem);
+			list.insertBefore(taskToWrite, list.children[list.children.length - 1]);
+		})
+	}
+
+	setTimeout(function () {
+		todos = document.getElementsByClassName('entry');
+		for (item of todos) {
+			addListeners(item);
+		}
+
+		countTodosLeft();
+	}, 0);
+}
+
+//Set drag and drop funcionality-event listeners on list items, allowing to rearange list order
+addListeners = (todo) => {
+
 	todo.addEventListener('dragstart', () => {
-		/* todo.classList.add('detached');
-		itemToMove = document.querySelector('.detached'); */
 
 		//Set dragged element as Item to move
 		itemToMove = todo;
+
+		//Hide item while moving
 		setTimeout(() => itemToMove.style.display = 'none', 0);
 	});
 
 	todo.addEventListener('dragend', () => {
-		itemToMove.style.display = 'flex';
+
+		//Show moved item, after moving ended
+		todo.style.display = 'flex';
+
+		//Cancel Item to move
 		itemToMove = null;
-	})
+	});
 
 	todo.addEventListener('dragover', (event) => {
 
-		//Set adding-related classes to the element that is dragged over by moving element
+		//Set class to mark dragged over element as target element
 		todo.classList.add('target');
 
+		//Depending on position of dragged element related do dragged over element,
+		//add class that determines place for dropping
 		if (event.offsetY <= todo.getBoundingClientRect().height / 2) {
 			todo.classList.add('insertAbove');
 			todo.classList.remove('insertBelow');
@@ -34,29 +70,204 @@ todos.forEach((todo, index) => {
 			todo.classList.remove('insertAbove');
 		}
 
-		//Remove adding-related classes from all other elements
-
-		for (let i = 0; i < todos.length; i++) {
-			if (i === index) {
+		//Remove adding-related classes from all other elements, but teh element that is dragged over
+		for (item of todos) {
+			if (todo === item) {
 				continue;
 			} else {
-				todos[i].classList.remove('target', 'insertAbove', 'insertBelow');
+				item.classList.remove('target', 'insertAbove', 'insertBelow');
 			}
 		}
 	});
+
+	//Add event listener to delete button-remove list item (todo) and update local storage
+	todo.lastElementChild.addEventListener('click', () => {
+		todo.remove();
+		update();
+		countTodosLeft();
+	});
+
+	//Add event listener to checkbox-mark task as completed and update local storage
+	todo.firstElementChild.children['completed'].addEventListener('change', () => {
+		todo.children[1].classList.toggle('done');
+		update();
+		countTodosLeft();
+	});
+}
+
+//get todo from user input, create new todo element and add to list and save to local storage
+addNewTodo = () => {
+
+	//Get values of new entry from input
+	let newTodo = {
+		completed: completeCheck.checked,
+		task: taskInput.value
+	}
+
+	//Reset input after data take-over
+	formReset();
+
+	//Create new li element with data from input and add event listeners
+	const taskToWrite = createTask(newTodo);
+	addListeners(taskToWrite);
+
+	//Add new li to teh top of existing todos
+	list.insertBefore(taskToWrite, list.children[0]);
+
+	//Send new todos to local storage
+	update();
+	countTodosLeft();
+}
+
+//Refresh todo list and update local storage
+update = () => {
+
+	//Create temp array for storing todos
+	let tasks = [];
+
+	//Read todos from HTML (list items)
+	for (item of todos) {
+		tasks.push({ task: item.querySelector('p').innerText, completed: item.querySelector('input').checked });
+	};
+
+	//Write to local storage
+	localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+//Control add button appearance, depending on input-showw button if input is not empty
+taskInput.addEventListener('input', () => {
+	if (this.value !== '') {
+		addTaskBtn.style.display = 'block';
+	}
 });
 
+//Reset new todo input field
+formReset = () => {
+	taskInput.value = "";
+	addTaskBtn.style.display = 'none';
+	completeCheck.checked = false;
+}
+
+//write HTML for tasks
+createTask = (data) => {
+	let newTask = document.createElement('li');
+	newTask.setAttribute('draggable', 'true');
+	newTask.classList.add('entry');
+
+	let completeIndicator = document.createElement('div');
+	completeIndicator.classList.add('checkMark');
+
+	let indicatorFrame = document.createElement('span');
+	indicatorFrame.classList.add('frame');
+
+	let completed = document.createElement('input');
+	completed.setAttribute('type', 'checkbox');
+	completed.setAttribute('name', 'completed');
+	if (data.completed) {
+		completed.setAttribute('checked', 'true');
+	}
+
+	let checkIcon = document.createElement('span');
+	checkIcon.classList.add('material-icons-round', 'check-mark');
+	checkIcon.innerText = "done";
+
+	completeIndicator.appendChild(indicatorFrame);
+	completeIndicator.appendChild(completed);
+	completeIndicator.appendChild(checkIcon);
+
+	let task = document.createElement('p');
+	task.innerText = data.task;
+	if (data.completed) {
+		task.classList.add('done');
+	}
+
+	let closeBtn = document.createElement('span');
+	closeBtn.classList.add('material-symbols-rounded', 'action');
+	closeBtn.innerText = 'close';
+
+	newTask.appendChild(completeIndicator);
+	newTask.appendChild(task);
+	newTask.appendChild(closeBtn);
+
+	return newTask;
+}
+
+//Allow dropping to another place in list
 list.addEventListener('dragover', (event) => {
 	event.preventDefault();
 });
 
+//Finish drag and drop-determine dropping place (abowe/below target element),
+//drop itemToMove on target, refresh list and local storage
 list.addEventListener('drop', () => {
+
+	//Get target element to drop dragged element
 	const anchorElement = document.querySelector('.target');
+
+	//Determine place to drop dragged element depending on position related classes
 	if (anchorElement.classList.contains('insertAbove')) {
 		anchorElement.insertAdjacentElement('beforebegin', itemToMove);
+
 	} else {
 		anchorElement.insertAdjacentElement('afterend', itemToMove);
 	}
 
+	//Remove drop determing classes from target elemen
 	anchorElement.classList.remove('target', 'insertAbove', 'insertBelow');
+
+	//Send new order of todos to local storage
+	update();
 });
+
+//Set functionality to add button
+addTaskBtn.addEventListener('click', addNewTodo);
+
+//Count remaining todos
+countTodosLeft = () => {
+	let counter = todos.length - list.querySelectorAll('.done').length;
+	if (counter === 1) {
+		leftTasksNumber.innerText = counter + " item left";
+	} else {
+		leftTasksNumber.innerText = counter + " items left";
+	}
+}
+
+//Filter active
+completedFilterBtn.addEventListener('click', () => {
+	list.querySelectorAll('p:not(.done)').forEach(li => {
+		li.parentElement.style.display = 'none';
+	});
+	list.querySelectorAll('p.done').forEach(li => {
+		li.parentElement.style.display = 'flex';
+	});
+});
+
+//Filter completed
+activeFilterBtn.addEventListener('click', () => {
+	list.querySelectorAll('li p:not(.done)').forEach(li => {
+		li.parentElement.style.display = 'flex';
+	});
+	list.querySelectorAll('li p.done').forEach(li => {
+		li.parentElement.style.display = 'none';
+	});
+});
+
+//Filter all
+allBtn.addEventListener('click', () => {
+	list.querySelectorAll('li').forEach(item => {
+		item.style.display = 'flex';
+	});
+});
+
+//Remove completed task s from list and update local storage
+clearCompletedBtn.addEventListener('click', () => {
+	for (item of todos) {
+		if (item.querySelector('input').checked) {
+			item.remove();
+		}
+	}
+
+	update();
+});
+
+moon.addEventListener('click', function () { document.body.classList.toggle('dark'); })

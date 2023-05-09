@@ -24,12 +24,13 @@ main {
 .action, .action.material-symbols-rounded {
 	display: none;
 	font-weight: 300;
+	color: var(--dark-grayish-blue);
+	cursor: pointer;
 }
 
 p.info {
-	margin-top: 30px;
+	margin: 30px auto 50px;
 	text-align: center;
-
 }
 
 .insertAbove {

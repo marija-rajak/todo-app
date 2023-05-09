@@ -27,15 +27,15 @@
 			<div id="newTask">
 				<div class="checkMark">
 					<span class="frame"></span>
-					<input type="checkbox" name="completed">
+					<input type="checkbox" name="completed" id="complete-check">
 					<span class="material-icons-round check-mark">done</span>
 				</div>
-				<input type="text" size="40" placeholder="Create a new todo...">
-				<span class="action">Add</span>
+				<input type="text" size="40" placeholder="Create a new todo..." id="task-input">
+				<span class="action" id="add-task">Add</span>
 			</div>
 
 			<ul id="todo_list">
-				<li draggable="true">
+			<!-- 	<li draggable="true">
 					<div class="checkMark">
 						<span class="frame"></span>
 						<input type="checkbox" name="completed">
@@ -64,15 +64,15 @@
 					<p>Another task</p>
 					<span class="material-symbols-rounded action">close</span>
 
-				</li>
+				</li> -->
 				<li>
-					<span>items left</span>
+					<span></span>
 					<div>
-						<span>All</span>
-						<span>Active</span>
-						<span>Completed</span>
+						<span id="allBtn">All</span>
+						<span id="activeFilterBtn">Active</span>
+						<span id="completedFilterBtn">Completed</span>
 					</div>
-					<span>Clear Completed</span>
+					<span id="clearCompletedBtn">Clear Completed</span>
 				</li>
 			</ul>
 			<p class="info">Drag and drop to reorder list</p>
