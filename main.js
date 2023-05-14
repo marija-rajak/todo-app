@@ -239,7 +239,7 @@ countTodosLeft = () => {
 }
 
 //Filter todos in desired cathegory
-let selectTodos = (query) => {
+selectTodos = (query) => {
 	selectedTodos = null;
 	for (item of list.children) {
 
@@ -257,7 +257,7 @@ let selectTodos = (query) => {
 	styleFirst();
 }
 
-//
+//Find first element in selected list to apply style
 styleFirst = () => {
 	for (item of selectedTodos) {
 		if (item == selectedTodos[0]) {
@@ -284,7 +284,8 @@ allBtn.addEventListener('click', () => {
 
 //Remove completed tasks from list and update local storage
 clearCompletedBtn.addEventListener('click', () => {
-	for (item of todos) {
+	let todosArray = [...todos];
+	for (item of todosArray) {
 		if (item.querySelector('input').checked) {
 			item.remove();
 		}
