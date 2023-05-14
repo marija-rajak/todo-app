@@ -1,6 +1,7 @@
-const moon = document.getElementById('themeIcon'); //theme changing icon
+const themeIcon = document.getElementById('themeIcon'); //theme changing icon
 let todos; //collection of todo list elements
-const list = document.getElementById('todo_list'); //todo list
+let selectedTodos; //collection of selected (completed/active) todos
+let list = document.getElementById('todo_list'); //todo list
 
 let itemToMove = null; //dragged list item
 
@@ -26,10 +27,10 @@ window.onload = () => {
 
 	setTimeout(function () {
 		todos = document.getElementsByClassName('entry');
+
 		for (item of todos) {
 			addListeners(item);
 		}
-
 		countTodosLeft();
 	}, 0);
 }
@@ -70,7 +71,7 @@ addListeners = (todo) => {
 			todo.classList.remove('insertAbove');
 		}
 
-		//Remove adding-related classes from all other elements, but teh element that is dragged over
+		//Remove adding-related classes from all other elements, but the element that is dragged over
 		for (item of todos) {
 			if (todo === item) {
 				continue;
@@ -217,6 +218,11 @@ list.addEventListener('drop', () => {
 
 	//Send new order of todos to local storage
 	update();
+
+	//Apply styles for the first element in list, after dragging item in selected cathegory
+	if (selectedTodos) {
+		styleFirst();
+	}
 });
 
 //Set functionality to add button
@@ -232,34 +238,51 @@ countTodosLeft = () => {
 	}
 }
 
-//Filter active
-completedFilterBtn.addEventListener('click', () => {
-	list.querySelectorAll('p:not(.done)').forEach(li => {
-		li.parentElement.style.display = 'none';
-	});
-	list.querySelectorAll('p.done').forEach(li => {
-		li.parentElement.style.display = 'flex';
-	});
-});
+//Filter todos in desired cathegory
+let selectTodos = (query) => {
+	selectedTodos = null;
+	for (item of list.children) {
+
+		if (item.querySelector(query)) {
+			item.style.display = 'flex';
+			item.classList.add('selected');
+		} else {
+			item.style.display = 'none';
+			item.classList.remove('selected');
+		}
+	}
+	list.lastElementChild.style.display = 'flex';
+
+	selectedTodos = list.getElementsByClassName('selected');
+	styleFirst();
+}
+
+//
+styleFirst = () => {
+	for (item of selectedTodos) {
+		if (item == selectedTodos[0]) {
+			item.classList.add('firstOf');
+		} else {
+			item.classList.remove('firstOf');
+		}
+	}
+}
 
 //Filter completed
-activeFilterBtn.addEventListener('click', () => {
-	list.querySelectorAll('li p:not(.done)').forEach(li => {
-		li.parentElement.style.display = 'flex';
-	});
-	list.querySelectorAll('li p.done').forEach(li => {
-		li.parentElement.style.display = 'none';
-	});
-});
+completedFilterBtn.addEventListener('click', () => selectTodos('.done'));
 
-//Filter all
+//Filter active
+activeFilterBtn.addEventListener('click', () => selectTodos('p:not(.done)'));
+
+//Show all
 allBtn.addEventListener('click', () => {
 	list.querySelectorAll('li').forEach(item => {
 		item.style.display = 'flex';
+		item.classList.remove('selected');
 	});
 });
 
-//Remove completed task s from list and update local storage
+//Remove completed tasks from list and update local storage
 clearCompletedBtn.addEventListener('click', () => {
 	for (item of todos) {
 		if (item.querySelector('input').checked) {
@@ -270,4 +293,14 @@ clearCompletedBtn.addEventListener('click', () => {
 	update();
 });
 
-moon.addEventListener('click', function () { document.body.classList.toggle('dark'); })
+
+themeIcon.addEventListener('click', function () {
+	document.querySelectorAll('*').forEach(element => element.classList.toggle('dark-mode'));
+	if (themeIcon.classList.contains('dark-mode')) {
+		themeIcon.src = 'images/icon-sun.svg';
+		themeIcon.alt = 'light theme icon';
+	} else {
+		themeIcon.src = 'images/icon-moon.svg';
+		themeIcon.alt = 'dark theme icon';
+	}
+})

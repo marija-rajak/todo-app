@@ -24,17 +24,17 @@ h1 {
 
 footer {
 	font-size: 0.8rem;
-	color: violet;
+	color: var(--dark-grayish-blue);
 	text-align: center;
 
 	a {
 		text-decoration: none;
 		font-size: 1em;
 		font-weight: 700;
-		color: darkblue;
+		color: var(--bright-blue);
 
 		&:visited {
-			color:  darkblue;
+			color: var(--bright-blue);
 		}
 	}
 }
